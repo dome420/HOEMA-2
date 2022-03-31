@@ -23,12 +23,14 @@ int main() {
 	} while (V_Size <= 0);
 	V1.creat_Dimension(V_Size);
 	V_Size = 0;
+	// (1) Werte eingabe für den ersten Vektor
 	do {
 		cout << "Geben Sie die Vektor Groeße des ersten Vektors ein : ";
 		cin >> V_Size;
 
 	} while (V_Size <= 0);
 	V1.creat_Dimension(V_Size);
+	// (1) Werte eingabe für den zweiten Vektor
 	V_Size = 0;
 	
 	cout << endl;

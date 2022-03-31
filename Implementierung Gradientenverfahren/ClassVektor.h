@@ -13,8 +13,8 @@
         ~CMyVektor();
 
         //Public Method
-        int creat_Dimension(int x) {};
-        int set_specified_Value(int x) {};
+        int creat_Dimension(vector<double> &V, int Dimension, int x){};
+        int set_specified_Value(vector<double> &V, int key, int Value){};
         int get_specified_Value(int x) {};
         int get_length_Vector(const std::vector<double>& V) {};
     };
@@ -24,26 +24,25 @@
 
     CMyVektor::~CMyVektor(){}
 
-void creat_Dimension(int x)
+// (2) Dimension bestimmen können
+void creat_Dimension(int Dimension_x)
 {
-    if (x > Dimension)
+    if (Dimension < V.size())
     {
         Dimension = x;
         V.resize(Dimension);
     }
 };
-void set_specified_Value(const vector<double>& V, int key, int Value)
+void set_specified_Value(vector<double> &V, int key, int Value)
 {
-
+        V[key] = Value;
 };
 double get_specified_Value(const vector<double> &V ,int key)
 {
     // vom intervall anfang - ende des Vectors
-    if (std::count(V.begin(), V.end(), key))
-    {
-    }
+    return V[key];
 };
-int get_length_Vector(const std::vector<double>& V)
+int get_length_Vector(const std::vector<double> &V)
 {
-
+    return V.size();
 };
