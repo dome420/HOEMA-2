@@ -6,17 +6,17 @@
     private:
         /* data */
         int Dimension = 0, Value = 0, key = 0;
-        std::vector<double>V;
-
+        std::vector<double>Vector;
     public:
         CMyVektor();
         ~CMyVektor();
 
         //Public Method
-        int creat_Dimension(vector<double> &V, int Dimension, int x){};
-        int set_specified_Value(vector<double> &V, int key, int Value){};
-        int get_specified_Value(int x) {};
-        int get_length_Vector(const std::vector<double>& V) {};
+        void set_Dimension(int Dimension /* Aktuelle Dim*/);
+        void set_specified_Value(int index, int Value);
+        double get_specified_Value(int key);
+        int get_length_Vector();
+        double& operator [](int index);
     };
 
 
@@ -25,24 +25,30 @@
     CMyVektor::~CMyVektor(){}
 
 // (2) Dimension bestimmen können
-void creat_Dimension(int Dimension_x)
+void CMyVektor::set_Dimension(int Dimension /* Aktuelle Dim*/)
 {
-    if (Dimension < V.size())
-    {
-        Dimension = x;
-        V.resize(Dimension);
-    }
+        Vector.resize(Dimension);
 };
-void set_specified_Value(vector<double> &V, int key, int Value)
+void CMyVektor::set_specified_Value(int index, int Value)
 {
-        V[key] = Value;
+        Vector[index] = Value;
 };
-double get_specified_Value(const vector<double> &V ,int key)
+double CMyVektor::get_specified_Value(int key)
 {
     // vom intervall anfang - ende des Vectors
-    return V[key];
+    for (unsigned i = 0; i < Vector.size(); i++)
+    {
+        if (Vector[i] == key) {
+            return Vector[i];
+        }
+    }
 };
-int get_length_Vector(const std::vector<double> &V)
+int CMyVektor::get_length_Vector()
 {
-    return V.size();
+    return Vector.size();
 };
+
+double& CMyVektor::operator [](int index)
+{
+    return Vector[index];
+}
