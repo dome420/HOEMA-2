@@ -132,8 +132,10 @@ CMyVektor gradientenverfahren(CMyVektor x, double (*funktion)(CMyVektor x), doub
     for (int i = 0; i < 25; i++) 
     {
         double fx = funktion(x);
+        //gradient berechnen
         CMyVektor grad(x.get_dim());
         grad = gradient(x, funktion);
+
         double stepValue = funktion((x + (lambda*grad)));
 
         if (stepValue <= fx) 
