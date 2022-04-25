@@ -8,28 +8,29 @@
         std::vector<double>Vector;
     public:
         // Constructor & Destructor
-        CMyVektor();
+        CMyVektor()
+        {
+            Vector.assign(1, 0.0);
+        };
+        CMyVektor(int dimension, double wert = 0.0)
+        {
+            Vector.assign(dimension, wert);
+        }
         ~CMyVektor();
 
         //setter
         void set_Dimension(int Dimension /* Aktuelle Dim*/); // Set Dimension of a Vector
-        void set_specified_Value(int index, int Value); // overwrites a new value at a specific index
+        void set_specified_Value(int index, double Value); // overwrites a new value at a specific index
         //getter
-        int get_dimension() { return Vector.size();}; // return vector size("dim")
+        size_t get_dim(); // return vector size("dim")
         double get_specified_Value(int key); // return value at a specific index
-        int get_dim(); // return Vector size ("dim")
         double get_length(CMyVektor& x); // return length of Vector with sqrt(pow(x[i],2)
         //überladungen
-        double& operator [](int index);
+        double& operator[](int index);
         friend std::ostream& operator<<(std::ostream& os, CMyVektor x);
-     
+        friend CMyVektor operator*(double lambda, CMyVektor& x);
+        //CMyVektor operator=(CMyVektor& a);
     };
-
-
-    CMyVektor::CMyVektor()
-    {
-        Vector.assign(1, 0.0);
-    }
   
     CMyVektor::~CMyVektor()
     {
@@ -41,7 +42,7 @@ void CMyVektor::set_Dimension(int Dimension /* Aktuelle Dim*/)
 {
         Vector.resize(Dimension);
 };
-void CMyVektor::set_specified_Value(int index, int Value)
+void CMyVektor::set_specified_Value(int index, double Value)
 {
         Vector[index] = Value;
 };
@@ -55,6 +56,10 @@ double CMyVektor::get_specified_Value(int key)
         }
     }
 };
+size_t CMyVektor::get_dim() 
+{
+   return  Vector.size();
+};
 double get_length(CMyVektor& x)
 {
     double length = 0;
@@ -64,19 +69,15 @@ double get_length(CMyVektor& x)
     }
     return sqrt(length);
 }
-int CMyVektor::get_dim()
-{
-    return Vector.size();
-};
 
-double& CMyVektor::operator [](int index)
+double& CMyVektor::operator[](int index)
 {
     return Vector[index];
 }
 std::ostream& operator<<(std::ostream& os, CMyVektor x)
 {
     os << "(";
-    for (size_t i = 0; i < x.get_dimension(); i++) {
+    for (size_t i = 0; i < x.get_dim(); i++) {
         os << x[i];
         if (i != x.Vector.size() - 1) {
             os << ";";
@@ -87,30 +88,67 @@ std::ostream& operator<<(std::ostream& os, CMyVektor x)
 }
 CMyVektor operator+(CMyVektor a, CMyVektor b)
 {
-    int ai = 0, bi = 0;
-    int counter = 0;
     CMyVektor c;
     c.set_Dimension(a.get_dim());
     // The dimension of the vector should be the same
     if (a.get_dim() == b.get_dim())
     {
-        while (counter < a.get_dim())
-        {
-            c[counter] = a[ai] + b[bi];
-            counter++;
-            ai++;
-            bi++;
+        for (size_t i = 0; i < a.get_dim(); i++) {
+            c[i] = a[i] + b[i];
         }
-        return c;
-    }
-}
-CMyVektor operator*(double lambda, CMyVektor a)
-{
-    CMyVektor c;
-    c.set_Dimension(a.get_dim());
-    for (unsigned i = 0; i < a.get_dim(); i++)
-    {
-        c[i] += lambda * a[i];
     }
     return c;
+}
+CMyVektor operator*(double lambda, CMyVektor& x)
+{
+    for (unsigned i = 0; i < x.get_dim(); i++)
+    {
+        x[i] *= lambda;
+    }
+    return x;
+}
+
+CMyVektor gradient(CMyVektor x, double (*funktion)(CMyVektor x)) 
+{
+    CMyVektor result;
+    result.set_Dimension(x.get_dim());
+    double h = 1e-8; 
+    double fx = funktion(x);
+    for (unsigned i = 0; i < x.get_dim(); i++)
+    {
+        CMyVektor xtmp;
+        xtmp.set_Dimension(x.get_dim());
+        xtmp = x;
+        xtmp[i] += h;
+
+        double tmp = ((funktion(xtmp) - fx) / h);
+
+        result[i] = tmp;
+    }
+    return result;
+}
+CMyVektor gradientenverfahren(CMyVektor x, double (*funktion)(CMyVektor x), double lambda) 
+{
+    for (int i = 0; i < 25; i++) 
+    {
+        double fx = funktion(x);
+        CMyVektor grad(x.get_dim());
+        grad = gradient(x, funktion);
+        double stepValue = funktion((x + (lambda*grad)));
+
+        if (stepValue <= fx) 
+        {
+           
+        }
+        else if (stepValue > fx) 
+        {
+
+        }
+        else
+        {
+
+        }
+
+
+    }
 }
