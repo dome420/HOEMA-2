@@ -18,9 +18,15 @@
     <ClInclude Include="ClassVektor.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
+    <ClInclude Include="CMyMatrix.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="CMyMatrix.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>

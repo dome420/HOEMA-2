@@ -2,6 +2,8 @@
 #include "ClassVektor.h"
 
 using namespace std;
+
+//Berechnet den Funktionswert mit einem Vektor
 double funktion1(CMyVektor a) 
 {
 	double x = a[0];
@@ -11,7 +13,9 @@ double funktion1(CMyVektor a)
 	return ergebnis;
 }
 
-double funktion2(CMyVektor b) {
+//Berechnet den Funktionswert mit einem Vektor
+double funktion2(CMyVektor b)
+{
 	double x1 = b[0];
 	double x2 = b[1];
 	double x3 = b[2];
@@ -27,15 +31,17 @@ int main() {
 	V1.set_specified_Value(0, 0.2);
 	V1.set_specified_Value(1, -2.1);
 	//------------------
-	CMyVektor V2;
+	/*CMyVektor V2;
 	V2.set_Dimension(2);
 	V2.set_specified_Value(0, 1);
-	V2.set_specified_Value(1, 1);
+	V2.set_specified_Value(1, 1);*/
 	//-----------------
 	CMyVektor V3;
 	V3.set_Dimension(V1.get_dim());
-	V3 =  gradient(V1, funktion1);
-	cout << V3;
+	gradientenverfahren(V1,funktion1);
+	system("pause");
+	return 0;
+	
 }
 
 
