@@ -4,13 +4,16 @@ CMyMatrix::CMyMatrix()
 {
 }
 
-CMyMatrix::~CMyMatrix()
+CMyMatrix::CMyMatrix(int y)
 {
+	y_pos = y;
+	Matrix.assign(y, CMyVektor());
 }
-
 void CMyMatrix::set_MatrixDim(int x, int y)
 {
-	Matrix[x][y];  
+	x_pos = x,
+	y_pos = y;
+	Matrix.assign(y_pos, x_pos);
 }
 int CMyMatrix::get_MatrixDim()
 {
@@ -32,17 +35,26 @@ CMyMatrix CMyMatrix::inverse(vector<vector<double>>)
 	return CMyMatrix();
 }
 
-CMyVektor operator*(CMyMatrix& A,CMyVektor& x)
+CMyVektor operator*(CMyMatrix A,CMyVektor x)
 {
-	CMyMatrix result;
-	result.set_MatrixDim(A.get_MatrixDim());
-
+	CMyVektor result;
 	for (unsigned spalte = 0; spalte < x.get_dim();  spalte++)
 	{
-		for (unsigned zeile = 0; zeile < x.get_dim(); zeile++)
+		for (unsigned zeile = 0; zeile < A.get_MatrixDim(); zeile++)
 		{
-			result[spalte][zeile] = A[spalte][zeile] * x[zeile];
+			result[zeile] += A.get_Matrix_Value(spalte,zeile) * x[zeile];
 		}
 	}
 	return result;
+}
+int det(CMyMatrix& x) // 2x2 Matrix
+{
+	int det = 0;
+	det = x.get_Matrix_Value(0,0) * x.get_Matrix_Value(1, 1);
+	det -= x.get_Matrix_Value(1,0) * x.get_Matrix_Value(0,1);
+	return det;
+}
+CMyMatrix jacobi(CMyVektor x, CMyVektor(*funktion)(CMyVektor x))
+{
+
 }
