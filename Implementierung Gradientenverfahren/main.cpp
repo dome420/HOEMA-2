@@ -31,14 +31,16 @@ int main() {
 	V1.set_specified_Value(0, 0.2);
 	V1.set_specified_Value(1, -2.1);
 	//------------------
-	/*CMyVektor V2;
-	V2.set_Dimension(2);
-	V2.set_specified_Value(0, 1);
-	V2.set_specified_Value(1, 1);*/
+	CMyVektor V2;
+	V2.set_Dimension(3);
+	V2.set_specified_Value(0,0.0);
+	V2.set_specified_Value(1, 0.0);
+	V2.set_specified_Value(2, 0.0); 
 	//-----------------
 	CMyVektor V3;
-	V3.set_Dimension(V1.get_dim());
-	gradientenverfahren(V1,funktion1);
+	V3.set_Dimension(V1.get_dim()); // ans ändern denken.
+	//gradientenverfahren(V1,funktion1);
+	gradientenverfahren(V1, funktion1); // ändern ...!!!
 	system("pause");
 	return 0;
 	

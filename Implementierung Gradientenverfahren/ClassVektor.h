@@ -140,7 +140,6 @@ CMyVektor gradient(CMyVektor x, double (*funktion)(CMyVektor x))
     return result;
 }
 
-/// Berechnung muss überschaut werde.
 /*Vector , Funktionswertberechnung mit Vector x, lambda */
 void gradientenverfahren(CMyVektor x, double (*funktion)(CMyVektor x), double lambda = 1.0, int schritt = 0)
 {
@@ -155,15 +154,6 @@ void gradientenverfahren(CMyVektor x, double (*funktion)(CMyVektor x), double la
     double gradlen = grad_x.get_length(); // Laenge des Gradienten
    //Ausgabe
    // 2 ifs
-    if (schritt == 25)
-    {
-        cout << "Ende wegen counter 25 bei" << endl;
-        cout << "\tlambda = " << lambda << endl;
-        cout << "\tf(x) = " << fx << endl;
-        cout << "\tgrad f(x) = " << grad_x << endl;
-        cout << "\t||grad f(x)|| = " << gradlen<< endl ;
-        return;
-    }
     if (gradlen < 1e-5)
     {
         cout << "Ende wegen ||grad f(x)||<1e-5 bei" << endl;
@@ -173,6 +163,17 @@ void gradientenverfahren(CMyVektor x, double (*funktion)(CMyVektor x), double la
         cout << "\t||grad f(x)|| = " << gradlen << endl;
         return;
     }
+    if (schritt == 25)
+    {
+        cout << "Ende wegen counter 25 bei" << endl;
+        cout << "\tlambda = " << lambda << endl;
+        cout << "\tf(x) = " << fx << endl;
+        cout << "\tgrad f(x) = " << grad_x << endl;
+        cout << "\t||grad f(x)|| = " << gradlen<< endl ;
+        return;
+    }
+  
+    else {
         /* Ausgabe der Aktuellen Werte*/
         cout << "Schritt: " << schritt << std::endl;
         cout << "\tx = " << x << endl;
@@ -187,47 +188,47 @@ void gradientenverfahren(CMyVektor x, double (*funktion)(CMyVektor x), double la
 
         // Neuen Funktionswert neu berechnen 
         double fx_neu = funktion(x_neu);
-        cout << "\tf(x_neu)= " << fx_neu << endl<<endl;
+        cout << "\tf(x_neu)= " << fx_neu << endl << endl;
 
         /*Ist der Funktionswert nach dem Testschritt von x_neu kleiner oder gleich dem aktuellen
         Funktionswert(fx), so halbiert man die Schrittweite. */
-        if (fx_neu <= fx) 
+        double tmp = fx_neu;
+        if (fx_neu <= fx)
         {
-            lambda /= 2;
-            cout << "\tTest mit halbierter Schrittweite " << "(lambda = " << lambda << " ):" << endl;
-            CMyVektor x_test = (x + (lambda * grad_x));
-            cout << "\tx_test = " << x_test << endl;
-            double fx_test = funktion(x_test);
-            cout << "\tf(x_test) = " << fx_test << endl;
-            if (fx_test > fx_neu) {
-                //
-                fx = fx_test; 
-                x = x_test;
-                cout << "\tbehalte alte Schrittweite\n\n";
-            }
-            schritt++;
-            gradientenverfahren(x, funktion, lambda, schritt);
-
-        }
-        else if (fx_neu > fx) 
-        {
-
-            lambda *= 2;
-            cout << "\tTest mit doppelter Schrittweite " << "(lambda = " << lambda << " ):" << endl;
-            CMyVektor x_test = (x + (lambda * grad_x));
-            cout << "\tx_test = " << x_test << endl;
-            double fx_test = funktion(x_test);
-            cout << "\tf(x_test) = " << fx_test << endl;
-
-            if (fx_test < fx_neu) {
-                fx = fx_neu;
-                x = x_neu;
+            while (tmp <= fx)
+            {
                 lambda /= 2;
-                cout << "\tbehalte alte Schrittweite\n\n";
+                x_neu = (x + (lambda * grad_x));
+                tmp = funktion(x_neu);
+                cout << "\tTest mit halbierter Schrittweite " << "(lambda = " << lambda << " ):" << endl;
+                cout << "\tx_test = " << x_neu << endl;
+                cout << "\tf(x_test) = " << tmp << endl;
             }
-            schritt++;
-            gradientenverfahren(x, funktion, lambda, schritt);
+                schritt++;
+                gradientenverfahren(x_neu, funktion, lambda, schritt);
         }
-        schritt++;
-    
+        else if (fx_neu > fx)
+        {
+            CMyVektor tmp_v = (x + ((lambda * 2) * grad_x));;
+            double fx_tmp_V = funktion(tmp_v);
+
+                //lambda *= 2;
+                cout << "\tTest mit doppelter Schrittweite " << "(lambda = " << lambda*2 << " ):" << endl;
+                cout << "\tx_test = " << tmp_v << endl;
+                cout << "\tf(x_test) = " << fx_tmp_V<< endl;
+                if (fx_tmp_V  <= fx_neu)
+                {
+
+                    cout << "\tbehalte alte Schrittweite\n\n";
+                    schritt++;
+                    gradientenverfahren(x_neu, funktion, lambda, schritt);
+                }
+                else
+                {
+                    schritt++;
+                    gradientenverfahren(tmp_v, funktion, lambda*2, schritt);
+                }
+                
+        }
+    }
 }
