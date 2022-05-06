@@ -1,5 +1,6 @@
 #include <iostream>
 #include "ClassVektor.h"
+#include "CMyMatrix.h"
 
 using namespace std;
 
@@ -23,9 +24,14 @@ double funktion2(CMyVektor b)
 	double ergebnis = -(2 * pow(x1, 2) - 2 * (x1 * x2) + pow(x2, 2) + pow(x3, 2) - 2 * x1 - 4 * x3);
 	return ergebnis;
 }
+CMyVektor funktion3(CMyVektor c)
+{
+
+}
 
 int main() {
-	// Addition und Multiplikation
+	int choice_fkt = 0;
+
 	CMyVektor V1;
 	V1.set_Dimension(2);
 	V1.set_specified_Value(0, 0.2);
@@ -36,11 +42,32 @@ int main() {
 	V2.set_specified_Value(0,0.0);
 	V2.set_specified_Value(1, 0.0);
 	V2.set_specified_Value(2, 0.0); 
-	//-----------------
-	CMyVektor V3;
-	V3.set_Dimension(V1.get_dim()); // ans ändern denken.
-	//gradientenverfahren(V1,funktion1);
-	gradientenverfahren(V1, funktion1); // ändern ...!!!
+	//----------------- 
+
+
+	cout << "1: Funktion 1 Vektor-2D, lambda = 1.0\n"
+		 << "2: Funktion 2 Vektor-3D, lambda = 0.1\n"
+		 << "3: Funktion 3 Jakobi Matrix\n"
+		 << "4: Funktion 4 Newton Verfahren\n";
+	cin >> choice_fkt;
+
+	switch (choice_fkt)
+	{
+	case 1:
+		gradientenverfahren(V1, funktion1);
+		break;
+	case 2:
+		gradientenverfahren(V2, funktion1,0.1);
+		break;
+	case 3:
+		///  Jacobi
+		break;
+	case 4:
+		///  newton
+		break;
+	default:
+		break;
+	}
 	system("pause");
 	return 0;
 	

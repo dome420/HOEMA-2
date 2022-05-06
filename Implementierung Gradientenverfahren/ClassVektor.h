@@ -1,4 +1,4 @@
-#pragma once
+#pragma once  /*Praktikum 1 Created By Dominique */
 #include <vector>
 #include <iostream>
 
@@ -152,8 +152,6 @@ void gradientenverfahren(CMyVektor x, double (*funktion)(CMyVektor x), double la
    
     //double firststep = funktion(VectorStep);
     double gradlen = grad_x.get_length(); // Laenge des Gradienten
-   //Ausgabe
-   // 2 ifs
     if (gradlen < 1e-5)
     {
         cout << "Ende wegen ||grad f(x)||<1e-5 bei" << endl;
@@ -172,8 +170,8 @@ void gradientenverfahren(CMyVektor x, double (*funktion)(CMyVektor x), double la
         cout << "\t||grad f(x)|| = " << gradlen<< endl ;
         return;
     }
-  
-    else {
+    else 
+    {
         /* Ausgabe der Aktuellen Werte*/
         cout << "Schritt: " << schritt << std::endl;
         cout << "\tx = " << x << endl;
