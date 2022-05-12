@@ -4,119 +4,95 @@ CMyMatrix::CMyMatrix()
 {
 }
 
-CMyMatrix::CMyMatrix(int y,int x)
+inline CMyMatrix::CMyMatrix(int y,int x)
 {
 	y_pos = y;
 	x_pos = x;
 	Matrix.assign(y, CMyVektor(x));
 }
-void CMyMatrix::set_MatrixDim(int x, int y)
-{
-	Matrix.resize(x * y);
-}
-int CMyMatrix::get_MatrixDim()
-{
-	return Matrix.size();
-}
-
-void CMyMatrix::set_Matrix_Value(double Value, int position_x, int position_y)
-{
-	Matrix[position_x][position_y] = Value;
-}
-
-int CMyMatrix::get_Matrix_Value(int position_x, int position_y)
-{
-	return Matrix[position_x][position_y];
-}
-int CMyMatrix::get_zeile()
+inline int CMyMatrix::get_anzahl_zeile()
 {
 	return y_pos;
 }
-int CMyMatrix::get_spalte()
+inline int CMyMatrix::get_anzahl_spalte()
 {
 	return x_pos;
 }
-CMyMatrix inverse(CMyMatrix& mx)
+inline CMyMatrix CMyMatrix::inverse()
 {
-	CMyMatrix result;
-	result.set_MatrixDim(2, 2);
-	if (mx.get_zeile() == 2 && mx.get_zeile() == 2) { // Prüfung auf Quadratische Matrize M=N
-	/// ///////
-		result.set_Matrix_Value(mx.get_Matrix_Value(1, 1), 0, 0);
-		result.set_Matrix_Value((-1) * mx.get_Matrix_Value(0, 1), 0, 1);
-		result.set_Matrix_Value((-1) * mx.get_Matrix_Value(1, 0), 1, 0);
-		result.set_Matrix_Value(mx.get_Matrix_Value(0, 0), 1, 1);
-
-		int det_ = mx.det();
-
-		return ((1.0 / mx.det()) * result);
+	if (y_pos != 2 || x_pos != 2) {
+		std::cout << "Diese Funktion ist nur fuer 2x2 Matrizen gedacht!\n";
+		exit(-1);
 	}
-	else
-	{
-		throw std::runtime_error("Hat nicht die gleichen anzahl an Zeilen wie Spalten. Somit nicht Quadratisch.\n");
-	}
+
+	double a = Matrix[0][0];
+	double b = Matrix[0][1];
+	double c = Matrix[1][0];
+	double d = Matrix[1][1];
+
+	double lambda = 1 / (a * d - b * c);
+
+	CMyMatrix result(2, 2);
+
+	result[0][0] = lambda * d;
+	result[0][1] = lambda * b * (-1);
+	result[1][0] = lambda * c * (-1);
+	result[1][1] = lambda * a;
+
+	return result;
 
 }
 
-CMyVektor operator*(CMyMatrix A,CMyVektor x)
+CMyVektor CMyMatrix::operator *(CMyVektor vector) 
 {
-	CMyVektor result;
-	for (unsigned spalte = 0; spalte < x.get_dim();  spalte++)
-	{
-		for (unsigned zeile = 0; zeile < A.get_MatrixDim(); zeile++)
-		{
-			result[zeile] += A.get_Matrix_Value(spalte,zeile) * x[zeile];
-		}
+	if (get_anzahl_zeile() != vector.get_dim()) {
+		std::cout << "\n\nUm Matrix*Vektor zu rechnen muessen die n Dim der Matrix und die Dimension des Vektors uebereinstimmen.\n\n";
+		exit(-2);
 	}
+
+	CMyVektor result(get_anzahl_zeile());
+
+	for (int i = 0; i < get_anzahl_zeile(); i++)
+		for (int j = 0; j < get_anzahl_spalte(); j++)
+			result[i] += (*this)[i][j] * vector[j];
+
 	return result;
 }
-/*
-* |a b |
-* |c d |
-* -->  a*d-c*b
-*/
-double CMyMatrix::det() // 2x2 Matrix   
-{
-	int det = 0;
+std::ostream& operator <<(std::ostream& stream, CMyMatrix& matrix) {
+	for (int i = 0; i < matrix.get_anzahl_zeile(); i++)
+		stream << "\t" << matrix[i] << std::endl;
 
-	det = this->get_Matrix_Value(0,0) * this->get_Matrix_Value(1, 1);
-	det -= this->get_Matrix_Value(1,0) * this->get_Matrix_Value(0,1);
-	return det;
+	return stream;
 }
 
-/// //
-CMyMatrix operator*(double value, CMyMatrix& M)
+CMyVektor& CMyMatrix::operator[](int index) 
 {
-	for (size_t y = 0; y < M.get_spalte(); y++)
-	{
-		for (size_t x = 0; x < M.get_zeile(); x++)
+	return Matrix[index];
+}
+inline CMyMatrix jacobi(CMyVektor x, CMyVektor(*funktion)(CMyVektor pos)) {
+	CMyVektor startPos = funktion(x);
+	CMyMatrix result(startPos.get_dim(), x.get_dim());
+
+	const double h = 1e-4;
+	const double hNeu = (1 / h);
+
+	for (int i = 0; i < x.get_dim(); i++) {
+		CMyVektor tmp = x;
+		tmp[i] += h;
+
+		CMyVektor wackeln = funktion(tmp);
+		CMyVektor ergebnisse = (wackeln - startPos) * hNeu;
+
+		for (int j = 0; j < ergebnisse.get_dim(); j++) 
 		{
-			
-			M.set_Matrix_Value(M.get_Matrix_Value(x, y) * value, x, y);
+			result[j][i] = ergebnisse[j];
 		}
 	}
-	return M;
-} 
-CMyMatrix jacobi(CMyVektor x, CMyVektor(*funktion)(CMyVektor x),const double h = 1e-4)
-{
-	
-		CMyMatrix result;
-		result.set_MatrixDim(2, 2);
 
-		for (unsigned y = 0; y < 2; y++)
-		{
-			CMyVektor xtmp;
-			xtmp = x;
-			for (size_t x = 0; x < 2; x++)
-			{
-				
-				xtmp[x] += h;
-
-				double tmp = ((funktion(xtmp) - fx) / h);
-
-				result[i] = tmp;
-			}
-			
-		}
-		return result;
+	return result;
 }
+/* Das Newton-Verfahren kann auch benutzt werden, um Nullstellen von mehrdimensionalen Funktionen zu bestimmen */
+//CMyMatrix newton(CMyVektor x, CMyVektor(*funktion)(CMyVektor x))
+//{
+//	CMyVektor dx = 
+//}

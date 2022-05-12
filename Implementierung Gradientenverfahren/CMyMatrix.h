@@ -1,27 +1,25 @@
 #pragma once   /*Praktikum 2 Created By Dominique */
 #include "ClassVektor.h"
-#include <vector>
 
-class CMyMatrix: public CMyVektor
+class CMyMatrix
 {
 	
 	private:
-	vector<CMyVektor>Matrix; // Zweidimensionaler Vektor 
+	std::vector<CMyVektor>Matrix; // Zweidimensionaler Vektor 
 	int y_pos = 0, x_pos = 0;
 	
-
 	public:
-	CMyMatrix();
+	inline CMyMatrix();
 	CMyMatrix(int,int);
-	void set_MatrixDim(int,int);
-	void set_MatrixDimViaVektor(CMyVektor);
-	int get_MatrixDim();
-	void set_Matrix_Value(double,int,int);
-	int get_Matrix_Value(int, int);
-	friend CMyVektor operator*(CMyMatrix A, CMyVektor x); /* Matrix-Vektor-Multiplikation realisieren*/
-	CMyMatrix inverse(CMyMatrix);
-	double det();
-	CMyMatrix jacobi(CMyVektor x, CMyVektor(*funktion)(CMyVektor x));
-	int get_zeile();
-	int get_spalte();
+
+	int get_anzahl_zeile();
+	int get_anzahl_spalte();
+
+	inline CMyMatrix inverse();
+	inline CMyVektor operator *(CMyVektor vector);
+	inline CMyVektor& operator[](int index);
+	inline friend std::ostream& operator <<(std::ostream& stream, CMyMatrix& matrix);
+	/*friend CMyMatrix operator*=( CMyMatrix M, double value);*/
+	
+	
 };
