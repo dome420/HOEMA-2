@@ -92,7 +92,24 @@ inline CMyMatrix jacobi(CMyVektor x, CMyVektor(*funktion)(CMyVektor pos)) {
 	return result;
 }
 /* Das Newton-Verfahren kann auch benutzt werden, um Nullstellen von mehrdimensionalen Funktionen zu bestimmen */
-//CMyMatrix newton(CMyVektor x, CMyVektor(*funktion)(CMyVektor x))
-//{
-//	CMyVektor dx = 
-//}
+inline void newton(CMyVektor x, CMyVektor(*funktion)(CMyVektor x),int counter = 0)
+{
+	CMyVektor tmp = x;
+	CMyVektor fx = (funktion(tmp));
+	CMyVektor dx;
+
+	if (counter == 25) {
+		std::cout << "Abbruch wegen counter == 25 : \n";
+	}
+	else if (dx.get_length() > 1e-5) {
+		std::cout << "Abbruch wegen >1e-5\n";
+	}
+	std::cout << "Schritt: " << counter << std::endl;
+	std::cout << "\tx = " << x << std::endl;
+	std::cout << "\tf(x) = " << fx << std::endl;
+	CMyMatrix fx_1 = jacobi(tmp, funktion);
+	std::cout << "\tf'(x) = " << fx_1 << std::endl; // Matrix
+	dx = fx_1.inverse() * fx;
+	std::cout << "\t||f(x)|| = " << dx.get_length() << std::endl;
+	newton(dx, funktion, counter++);
+}

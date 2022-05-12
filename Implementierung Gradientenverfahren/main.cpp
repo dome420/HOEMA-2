@@ -1,5 +1,6 @@
 #include <iostream>
 #include <math.h>
+#include <conio.h>
 
 /*includierte Header*/
 #include "CMyMatrix.h"
@@ -47,6 +48,7 @@ CMyVektor funktion3_jacobi(CMyVektor c)
 CMyVektor funktion4_newton(CMyVektor c) 
 {
 	CMyVektor tmp;
+	tmp.set_Dimension(c.get_dim());
 	double x = c[0];
 	double y = c[1];
 	tmp[0] = pow(x,3)*pow(y,3) - 2 * y;
@@ -56,6 +58,7 @@ CMyVektor funktion4_newton(CMyVektor c)
 
 int main() {
 	int choice_fkt = 0;
+	char cmd_clear;
 
 	CMyVektor V1;
 	V1.set_Dimension(2);
@@ -68,33 +71,68 @@ int main() {
 	V2[1]= 0.0;
 	V2[2] = 0.0;
 	//----------------- 
-	CMyMatrix V3(0,1);
+	CMyVektor V3;
+	V3.set_Dimension(2);
+	V3[0] = 1;
+	V3[1] = 1;
 
 
-	cout << "1: Funktion 1 Vektor-2D, lambda = 1.0\n"
-		 << "2: Funktion 2 Vektor-3D, lambda = 0.1\n"
-		 << "3: Funktion 3 Jakobi Matrix\n"
-		 << "4: Funktion 4 Newton Verfahren\n";
-	cin >> choice_fkt;
+	while (true) {
 
-	switch (choice_fkt)
-	{
-	case 1:
-		gradientenverfahren(V1, funktion1);
-		break;
-	case 2:
-		gradientenverfahren(V2, funktion1,0.1);
-		break;
-	case 3:
-		// Fkt Aufruf Jacobi - Matrix berechnen
-		//jacobi(V3, funktion3_jacobi);
-		break;
-	case 4:
-		// Funktionsaufruf Newtonverfahren
-		//newton();
-		break;
-	default:
-		break;
+		cout << "0 zum Beenden des Programms\n"
+			 << "1: Funktion 1 Vektor-2D, lambda = 1.0\n"
+			 << "2: Funktion 2 Vektor-3D, lambda = 0.1\n"
+			 << "3: Funktion 3 Jakobi Matrix\n"
+			 << "4: Funktion 4 Newton Verfahren\n";
+			
+		cin >> choice_fkt;
+
+		switch (choice_fkt)
+		{
+		case 1:
+			gradientenverfahren(V1, funktion1);
+			cout << endl;
+			std::cout << "Fenster leeren\n";
+			cin >> cmd_clear;
+			if (cmd_clear == 'j') {
+				system("CLS");
+			}
+			break;
+		case 2:
+			gradientenverfahren(V2, funktion1, 0.1);
+			cout << endl;
+			std::cout << "Fenster leeren\n";
+			cin >> cmd_clear;
+			if (cmd_clear == 'j') {
+				system("CLS");
+			}
+			break;
+		case 3:
+			// Fkt Aufruf Jacobi - Matrix berechnen
+			//jacobi(V3, funktion3_jacobi);
+			cout << endl;
+			std::cout << "Fenster leeren\n";
+			cin >> cmd_clear;
+			if (cmd_clear == 'j') {
+				system("CLS");
+			}
+			break;
+		case 4:
+			// Funktionsaufruf Newtonverfahren
+			newton(V3,funktion4_newton);
+			cout << endl;
+			std::cout << "Fenster leeren\n";
+			cin >> cmd_clear;
+			if (cmd_clear == 'j') {
+				system("CLS");
+			}
+			//newton();
+			break;
+		case 0: 
+			return 0;
+		default:
+			break;
+		}
 	}
 	system("pause");
 	return 0;
