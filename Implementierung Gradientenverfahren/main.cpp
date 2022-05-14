@@ -7,12 +7,12 @@
 
 /*includierte CPP*/
 #include "CmyVektor.cpp"
-#include "CMyMatrix.cpp"
+#include "Matrix.cpp"
 
 using namespace std;
 
 //Berechnet den Funktionswert mit einem Vektor
-double funktion1(CMyVektor a) 
+inline double funktion1(CMyVektor a) 
 {
 	double x = a[0];
 	double y = a[1];
@@ -22,7 +22,7 @@ double funktion1(CMyVektor a)
 }
 
 //Berechnet den Funktionswert mit einem Vektor
-double funktion2(CMyVektor b)
+inline double funktion2(CMyVektor b)
 {
 	double x1 = b[0];
 	double x2 = b[1];

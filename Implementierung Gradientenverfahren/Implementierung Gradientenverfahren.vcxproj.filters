@@ -26,10 +26,10 @@
     <ClCompile Include="main.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="CMyMatrix.cpp">
+    <ClCompile Include="CMyVektor.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="CMyVektor.cpp">
+    <ClCompile Include="Matrix.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>
