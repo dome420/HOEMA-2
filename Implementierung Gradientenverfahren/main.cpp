@@ -4,10 +4,11 @@
 
 /*includierte Header*/
 #include "CMyMatrix.h"
-
+#include "C_DGLSolver.h"
 /*includierte CPP*/
 #include "CmyVektor.cpp"
 #include "Matrix.cpp"
+#include "C_DGLSolver.cpp"
 
 using namespace std;
 
@@ -55,7 +56,16 @@ CMyVektor funktion4_newton(CMyVektor c)
 	tmp[1] = x - 2;
 	return tmp;
 }
-
+double erster_Ordnung_u_(CMyVektor y,int x_end = 2)
+{
+	double result = (y[1] * 2) - (y[0] * x_end);
+	return result;
+}
+CMyVektor erster_Ordnung_v_(CMyVektor y, int x_end = 2)
+{
+	double result = (y[0] * y[1]) - (2 * pow(x_end, 3));
+	return result;
+}
 int main() {
 	int choice_fkt = 0;
 	char cmd_clear;
@@ -75,9 +85,15 @@ int main() {
 	V3.set_Dimension(2);
 	V3[0] = 1;
 	V3[1] = 1;
-
-
-	while (true) {
+	//----------------- 
+	CMyVektor DG;
+	DG.set_Dimension(2);
+	DG[0] = 1;
+	DG[1] = 1;
+	
+	C_DGLSolver DGL;
+	while (true)
+	{
 
 		cout << "0 zum Beenden des Programms\n"
 			 << "1: Funktion 1 Vektor-2D, lambda = 1.0\n"
@@ -121,7 +137,7 @@ int main() {
 			// Funktionsaufruf Newtonverfahren
 			newton(V3,funktion4_newton);
 			cout << endl;
-			std::cout << "Fenster leeren\n";
+			std::cout << "wollen sie das Fenster leeren, dann "<< "j eingeben.\n";
 			cin >> cmd_clear;
 			if (cmd_clear == 'j') {
 				system("CLS");

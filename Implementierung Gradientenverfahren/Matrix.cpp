@@ -59,9 +59,16 @@ CMyVektor CMyMatrix::operator *(CMyVektor vector)
 	return result;
 }
 std::ostream& operator <<(std::ostream& stream, CMyMatrix& matrix) {
-	for (int i = 0; i < matrix.get_anzahl_zeile(); i++)
-		stream << "\t" << matrix[i] << std::endl;
-
+	
+	for (int i = 0; i < matrix.get_anzahl_zeile(); i++) {
+		std::cout << "\t( ";
+		for (int j = 0; j < matrix.get_anzahl_spalte(); j++)
+		{
+			stream << matrix[i][j];
+			std::cout << "; ";
+		}
+		std::cout << ")\n";
+	}
 	return stream;
 }
 
@@ -94,13 +101,14 @@ inline CMyMatrix jacobi(CMyVektor x, CMyVektor(*funktion)(CMyVektor pos)) {
 /* Das Newton-Verfahren kann auch benutzt werden, um Nullstellen von mehrdimensionalen Funktionen zu bestimmen */
 inline void newton(CMyVektor x, CMyVektor(*funktion)(CMyVektor x),int schritte = 0)
 {
-	CMyVektor x_tmp = x;
+	CMyVektor x_tmp = x;  
 	CMyVektor fx = (funktion(x)); // funktionswert an der stelle -> Vektor x
+	
 	/*Abbruch bedingungen */
 	if (schritte == 25) {
 		std::cout << "Abbruch wegen counter == 25 : \n";
 	}
-	else if (x_tmp.get_length() < 1e-5) {
+	else if (x_tmp.get_length() < 1e-5) {0,
 		std::cout << "Abbruch wegen >1e-5\n";
 	}
 	else {   /* Ausgaben von Vektoren, Funktionswerte an der stelle x , Jacobi - Inverse berechnen, laengen aufgabe*/
@@ -109,9 +117,10 @@ inline void newton(CMyVektor x, CMyVektor(*funktion)(CMyVektor x),int schritte =
 		std::cout << "\tf(x) = " << fx << std::endl;  //s.o Zeile 97
 		CMyMatrix fx_1 = jacobi(x_tmp, funktion); // Jacobi matrix an stelle x berechnen.
 		std::cout << "\tJacobi Matrix: f'(x) = " << fx_1 << std::endl; // Matrix
-		CMyVektor dx = fx_1.inverse() * (( fx)*(-1));
+		CMyVektor dx = fx_1.inverse() * (fx*(-1));
 		std::cout << "\t inverse f'(x)^-1: " << dx << std::endl;
-		std::cout << "||f(x)|| = " << dx.get_length() << std::endl;
+		std::cout << dx << std::endl;
+		std::cout << "\t||f(x)|| = " << dx.get_length() << std::endl;
 		schritte++;
 		CMyVektor x_neu = x_tmp + dx; // berechung für neu stelle x  = altes x + delta x
 		newton(x_neu, funktion,schritte);

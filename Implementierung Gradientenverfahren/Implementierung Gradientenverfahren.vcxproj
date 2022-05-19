@@ -141,9 +141,11 @@
   <ItemGroup>
     <ClInclude Include="ClassVektor.h" />
     <ClInclude Include="CMyMatrix.h" />
+    <ClInclude Include="C_DGLSolver.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CMyVektor.cpp" />
+    <ClCompile Include="C_DGLSolver.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Matrix.cpp" />
   </ItemGroup>
