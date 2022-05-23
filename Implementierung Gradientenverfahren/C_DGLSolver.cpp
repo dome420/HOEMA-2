@@ -8,32 +8,41 @@ C_DGLSolver::C_DGLSolver()
 {
 }
 // f_DGL_System Constructor
-inline C_DGLSolver::C_DGLSolver(int Ordnung, CMyVektor(*f_DGL_System)(CMyVektor y, double x))
+inline C_DGLSolver::C_DGLSolver(bool Ordnung, CMyVektor(*f_DGL_System)(CMyVektor y, double x))
 {
-	Anzahl_Ordnung = Ordnung;
+	if (Ordnung == false) {
+		Anzahl_Ordnung = Ordnung;
+	}
 
 }
 //F_DGL_nterOrdnung
-inline C_DGLSolver::C_DGLSolver(int Ordnung, double (*f_DGL_nterOrdnung)(CMyVektor y, double x)) 
+inline C_DGLSolver::C_DGLSolver(bool Ordnung, double (*f_DGL_nterOrdnung)(CMyVektor y, double x)) 
 {
-	Anzahl_Ordnung = Ordnung;
+	if (Ordnung) {
+		Anzahl_Ordnung = Ordnung;
+	}
 }
 C_DGLSolver::~C_DGLSolver()
 {
 }
 
+CMyVektor C_DGLSolver::ableitung_visibell(CMyVektor y, double x)
+{
+	return ableitungen(y,x);
+}
+
 CMyVektor C_DGLSolver::ableitungen(CMyVektor y, double x)
 {
 	C_DGLSolver DGL;
-	if (Anzahl_Ordnung == 1)
+	CMyVektor result;
+
+	if (Anzahl_Ordnung == 0)
 	{
-		CMyVektor tmp = DGL.f_DGL_System(y, x);
+		result = DGL.f_DGL_System(y, x);
 	}
-	else if (Anzahl_Ordnung > 1) {
-		CMyVektor tmp = DGL.f_DGL_nterOrdnung(y, x);
+	else{
+		result =DGL.f_DGL_nterOrdnung(y, x);
 	}
 	
-	/* Bedingungen 
-	*/
-	return CMyVektor();
+	return result;
 }

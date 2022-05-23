@@ -5,6 +5,7 @@
 /*includierte Header*/
 #include "CMyMatrix.h"
 #include "C_DGLSolver.h"
+
 /*includierte CPP*/
 #include "CmyVektor.cpp"
 #include "Matrix.cpp"
@@ -91,7 +92,7 @@ int main() {
 	DG[0] = 1;
 	DG[1] = 1;
 	
-	C_DGLSolver DGL;
+	C_DGLSolver DGL(0,f_DGL_system(DG,2.0));
 	while (true)
 	{
 
@@ -144,8 +145,8 @@ int main() {
 			}
 			//newton();
 			break;
-		case 0: 
-			return 0;
+		case 5: 
+
 		default:
 			break;
 		}
